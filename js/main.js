@@ -99,9 +99,5 @@ if (contactActions) {
       <span class="contact-department">Operaciones</span>
       <span class="contact-email-text">operaciones1@megatradingcorp.com</span>
     </a>
-    <a class="contact-link" href="mailto:contabilidad@megatradingcorp.com">
-      <span class="contact-department">Contabilidad</span>
-      <span class="contact-email-text">contabilidad@megatradingcorp.com</span>
-    </a>
   `;
 }
