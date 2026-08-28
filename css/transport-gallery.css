@@ -1,0 +1,103 @@
+.transport-gallery-panel {
+  min-height: 560px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  overflow: hidden;
+  border-radius: 28px;
+  background: #071a2f;
+  box-shadow: 0 24px 60px rgba(7, 26, 47, .16);
+}
+
+.transport-photo {
+  position: relative;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  background: #0b2747;
+}
+
+.transport-photo:first-child {
+  grid-row: 1 / 3;
+}
+
+.transport-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .55s ease;
+}
+
+.transport-photo:hover img {
+  transform: scale(1.045);
+}
+
+.transport-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(4, 17, 31, .72), rgba(4, 17, 31, .04) 58%);
+  pointer-events: none;
+}
+
+.transport-photo figcaption {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 16px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: #fff;
+}
+
+.transport-photo figcaption strong {
+  font-family: Manrope, sans-serif;
+  font-size: .98rem;
+  letter-spacing: -.01em;
+}
+
+.transport-photo figcaption span {
+  font-size: .72rem;
+  color: rgba(255,255,255,.72);
+}
+
+.contact-actions .contact-department {
+  display: block;
+  margin-bottom: 2px;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.48);
+}
+
+.contact-actions .button-light .contact-department {
+  color: rgba(7,26,47,.52);
+}
+
+.contact-email-text {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+  .transport-gallery-panel {
+    min-height: 610px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1.2fr .8fr;
+  }
+
+  .transport-photo:first-child {
+    grid-column: 1 / 3;
+    grid-row: auto;
+  }
+
+  .transport-photo figcaption {
+    left: 14px;
+    right: 14px;
+    bottom: 12px;
+  }
+}
