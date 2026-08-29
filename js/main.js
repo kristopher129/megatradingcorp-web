@@ -309,3 +309,43 @@ if (originalHero) {
 
   startAutoplay();
 }
+
+// Divide únicamente los títulos del carrusel en palabras para una entrada más marcada.
+const splitHeroTitleIntoWords = (title) => {
+  if (!title || title.dataset.wordsReady === 'true') return;
+
+  const fragment = document.createDocumentFragment();
+  let wordIndex = 0;
+
+  const appendText = (text, accent = false) => {
+    text.split(/(\s+)/).forEach((part) => {
+      if (!part) return;
+
+      if (/^\s+$/.test(part)) {
+        fragment.appendChild(document.createTextNode(part));
+        return;
+      }
+
+      const word = document.createElement('span');
+      word.className = accent ? 'hero-word hero-word-accent' : 'hero-word';
+      word.style.setProperty('--word-index', String(wordIndex));
+      word.textContent = part;
+      fragment.appendChild(word);
+      wordIndex += 1;
+    });
+  };
+
+  Array.from(title.childNodes).forEach((node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      appendText(node.textContent || '', false);
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      appendText(node.textContent || '', true);
+    }
+  });
+
+  title.replaceChildren(fragment);
+  title.dataset.wordsReady = 'true';
+};
+
+document.querySelectorAll('.hero-slider .hero-slide h1, .hero-slider .hero-slide h2')
+  .forEach(splitHeroTitleIntoWords);
