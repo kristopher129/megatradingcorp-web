@@ -70,6 +70,49 @@
   padding: 92px 0 116px;
 }
 
+/* Entrada escalonada del contenido de cada diapositiva. */
+.hero-slide .eyebrow,
+.hero-slide h1,
+.hero-slide h2,
+.hero-slide .hero-slide-lead,
+.hero-slide .hero-actions,
+.hero-slide .hero-slider-note {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.hero-slide.is-active .eyebrow {
+  animation: heroTextIn .62s cubic-bezier(.2,.72,.24,1) .08s forwards;
+}
+
+.hero-slide.is-active h1,
+.hero-slide.is-active h2 {
+  animation: heroTextIn .72s cubic-bezier(.2,.72,.24,1) .17s forwards;
+}
+
+.hero-slide.is-active .hero-slide-lead {
+  animation: heroTextIn .68s cubic-bezier(.2,.72,.24,1) .30s forwards;
+}
+
+.hero-slide.is-active .hero-actions {
+  animation: heroTextIn .64s cubic-bezier(.2,.72,.24,1) .42s forwards;
+}
+
+.hero-slide.is-active .hero-slider-note {
+  animation: heroTextIn .60s cubic-bezier(.2,.72,.24,1) .53s forwards;
+}
+
+@keyframes heroTextIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .hero-slide .eyebrow {
   margin-bottom: 18px;
   color: #8ed9ff;
@@ -172,8 +215,9 @@
   transform: translateY(-50%) scale(1.05);
 }
 
-.hero-slider-prev { left: max(20px, calc((100vw - 1280px) / 2)); }
-.hero-slider-next { right: max(20px, calc((100vw - 1280px) / 2)); }
+/* Flechas pegadas a los laterales para liberar el área del texto. */
+.hero-slider-prev { left: 18px; }
+.hero-slider-next { right: 18px; }
 
 .hero-slider-control svg {
   width: 21px;
@@ -241,6 +285,9 @@
     width: 42px;
     height: 42px;
   }
+
+  .hero-slider-prev { left: 12px; }
+  .hero-slider-next { right: 12px; }
 }
 
 @media (max-width: 640px) {
@@ -296,8 +343,8 @@
     transform: scale(1.05);
   }
 
-  .hero-slider-prev { left: 20px; }
-  .hero-slider-next { right: 20px; }
+  .hero-slider-prev { left: 14px; }
+  .hero-slider-next { right: 14px; }
 
   .hero-slider-dots { bottom: 43px; }
 }
@@ -312,5 +359,22 @@
 
   .hero-slide.is-active .hero-slide-image {
     transform: scale(1.035);
+  }
+
+  .hero-slide .eyebrow,
+  .hero-slide h1,
+  .hero-slide h2,
+  .hero-slide .hero-slide-lead,
+  .hero-slide .hero-actions,
+  .hero-slide .hero-slider-note,
+  .hero-slide.is-active .eyebrow,
+  .hero-slide.is-active h1,
+  .hero-slide.is-active h2,
+  .hero-slide.is-active .hero-slide-lead,
+  .hero-slide.is-active .hero-actions,
+  .hero-slide.is-active .hero-slider-note {
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 }
