@@ -68,20 +68,22 @@
 .hero-slide-content {
   width: min(720px, 68vw);
   padding: 92px 0 116px;
+  --title-start-x: 230px;
 }
 
-/* Animación inspirada en la referencia: etiqueta desde la izquierda,
-   título completo desde la derecha con máscara y resto mediante fade. */
+/* Movimiento combinado como en la referencia:
+   etiqueta desde arriba, título desde la derecha y resto desde abajo. */
 .hero-slide .eyebrow {
   margin-bottom: 18px;
   color: #8ed9ff;
   text-shadow: 0 2px 14px rgba(0,0,0,.22);
   opacity: 0;
-  transform: translateX(-72px);
+  transform: translateY(-64px);
+  will-change: transform, opacity;
 }
 
 .hero-slide.is-active .eyebrow {
-  animation: heroEyebrowIn .46s cubic-bezier(.18,.78,.24,1) .04s forwards;
+  animation: heroEyebrowDrop .54s cubic-bezier(.18,.78,.24,1) .03s forwards;
 }
 
 .hero-slide h1,
@@ -96,8 +98,8 @@
   text-wrap: balance;
   text-shadow: 0 4px 30px rgba(0,0,0,.28);
   opacity: 0;
-  transform: translateX(150px);
-  clip-path: inset(0 0 0 100%);
+  transform: translateX(var(--title-start-x));
+  clip-path: inset(0 0 0 62%);
   will-change: transform, opacity, clip-path;
 }
 
@@ -108,7 +110,7 @@
   color: #70ceff;
 }
 
-/* Neutraliza el experimento anterior de palabra por palabra sin cambiar el texto. */
+/* El experimento anterior dividía el título en palabras; se neutraliza visualmente. */
 .hero-slide h1 .hero-word,
 .hero-slide h2 .hero-word {
   display: inline;
@@ -122,7 +124,7 @@
 
 .hero-slide.is-active h1,
 .hero-slide.is-active h2 {
-  animation: heroTitleSweep .62s cubic-bezier(.16,.82,.22,1) .12s forwards;
+  animation: heroTitleFromRight .72s cubic-bezier(.12,.8,.2,1) .08s forwards;
 }
 
 .hero-slide-lead {
@@ -133,11 +135,12 @@
   color: rgba(255,255,255,.82);
   text-shadow: 0 2px 16px rgba(0,0,0,.24);
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(68px);
+  will-change: transform, opacity;
 }
 
 .hero-slide.is-active .hero-slide-lead {
-  animation: heroSoftFade .48s ease-out .50s forwards;
+  animation: heroFromBelow .60s cubic-bezier(.18,.76,.25,1) .20s forwards;
 }
 
 .hero-slider .hero-actions {
@@ -146,11 +149,12 @@
   gap: 14px;
   margin-top: 34px;
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(92px);
+  will-change: transform, opacity;
 }
 
 .hero-slide.is-active .hero-actions {
-  animation: heroSoftFade .46s ease-out .62s forwards;
+  animation: heroFromBelow .62s cubic-bezier(.18,.76,.25,1) .30s forwards;
 }
 
 .hero-slider .button-primary {
@@ -174,11 +178,12 @@
   color: rgba(255,255,255,.7);
   font-size: .9rem;
   opacity: 0;
-  transform: translateY(6px);
+  transform: translateY(58px);
+  will-change: transform, opacity;
 }
 
 .hero-slide.is-active .hero-slider-note {
-  animation: heroSoftFade .44s ease-out .72s forwards;
+  animation: heroFromBelow .56s cubic-bezier(.18,.76,.25,1) .40s forwards;
 }
 
 .hero-slider-note::before {
@@ -191,28 +196,29 @@
   box-shadow: 0 0 0 6px rgba(94,230,168,.1);
 }
 
-@keyframes heroEyebrowIn {
-  from {
+@keyframes heroEyebrowDrop {
+  0% {
     opacity: 0;
-    transform: translateX(-72px);
+    transform: translateY(-64px);
   }
-  to {
+  100% {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 
-@keyframes heroTitleSweep {
+@keyframes heroTitleFromRight {
   0% {
-    opacity: 0;
-    transform: translateX(150px);
-    clip-path: inset(0 0 0 100%);
+    opacity: .15;
+    transform: translateX(var(--title-start-x));
+    clip-path: inset(0 0 0 62%);
   }
-  22% {
+  24% {
     opacity: 1;
+    clip-path: inset(0 0 0 42%);
   }
-  55% {
-    clip-path: inset(0 0 0 24%);
+  62% {
+    clip-path: inset(0 0 0 8%);
   }
   100% {
     opacity: 1;
@@ -221,12 +227,11 @@
   }
 }
 
-@keyframes heroSoftFade {
-  from {
+@keyframes heroFromBelow {
+  0% {
     opacity: 0;
-    transform: translateY(8px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
@@ -316,12 +321,12 @@
   .hero-slide-content {
     width: min(680px, calc(100vw - 110px));
     padding: 82px 0 104px;
+    --title-start-x: 150px;
   }
 
   .hero-slide h1,
   .hero-slide h2 {
     font-size: clamp(2.8rem, 8vw, 4.4rem);
-    transform: translateX(110px);
   }
 
   .hero-slide-overlay {
@@ -356,22 +361,28 @@
   .hero-slide-content {
     width: calc(100vw - 40px);
     padding: 72px 0 110px;
+    --title-start-x: 92px;
   }
 
   .hero-slide h1,
   .hero-slide h2 {
     margin-bottom: 20px;
     font-size: clamp(2.55rem, 12vw, 3.6rem);
-    transform: translateX(78px);
+  }
+
+  .hero-slide .eyebrow {
+    transform: translateY(-44px);
   }
 
   .hero-slide-lead {
     font-size: .98rem;
     line-height: 1.65;
+    transform: translateY(48px);
   }
 
   .hero-slider .hero-actions {
     margin-top: 28px;
+    transform: translateY(64px);
   }
 
   .hero-slider .button {
