@@ -101,3 +101,44 @@ if (contactActions) {
     </a>
   `;
 }
+
+// Identidad visual oficial de Mega Trading Corporation.
+const officialLogo = 'assets/logo-mega-trading-email.png?v=4';
+
+if (!document.querySelector('link[href="css/brand-logo.css"]')) {
+  const brandStyles = document.createElement('link');
+  brandStyles.rel = 'stylesheet';
+  brandStyles.href = 'css/brand-logo.css';
+  document.head.appendChild(brandStyles);
+}
+
+const setOfficialBrandLogo = (brandElement) => {
+  if (!brandElement) return;
+  brandElement.classList.add('brand-logo-link');
+  brandElement.innerHTML = `
+    <span class="brand-logo-shell">
+      <img class="brand-logo" src="${officialLogo}" alt="Mega Trading Corporation">
+    </span>
+  `;
+};
+
+setOfficialBrandLogo(document.querySelector('.site-header .brand'));
+setOfficialBrandLogo(document.querySelector('.site-footer .brand'));
+
+// Favicon usando el mismo recurso oficial para mantener consistencia de marca.
+let favicon = document.querySelector('link[rel="icon"]');
+if (!favicon) {
+  favicon = document.createElement('link');
+  favicon.rel = 'icon';
+  document.head.appendChild(favicon);
+}
+favicon.type = 'image/png';
+favicon.href = officialLogo;
+
+let appleTouchIcon = document.querySelector('link[rel="apple-touch-icon"]');
+if (!appleTouchIcon) {
+  appleTouchIcon = document.createElement('link');
+  appleTouchIcon.rel = 'apple-touch-icon';
+  document.head.appendChild(appleTouchIcon);
+}
+appleTouchIcon.href = officialLogo;
