@@ -70,53 +70,18 @@
   padding: 92px 0 116px;
 }
 
-/* Entrada escalonada del contenido de cada diapositiva. */
-.hero-slide .eyebrow,
-.hero-slide h1,
-.hero-slide h2,
-.hero-slide .hero-slide-lead,
-.hero-slide .hero-actions,
-.hero-slide .hero-slider-note {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.hero-slide.is-active .eyebrow {
-  animation: heroTextIn .62s cubic-bezier(.2,.72,.24,1) .08s forwards;
-}
-
-.hero-slide.is-active h1,
-.hero-slide.is-active h2 {
-  animation: heroTextIn .72s cubic-bezier(.2,.72,.24,1) .17s forwards;
-}
-
-.hero-slide.is-active .hero-slide-lead {
-  animation: heroTextIn .68s cubic-bezier(.2,.72,.24,1) .30s forwards;
-}
-
-.hero-slide.is-active .hero-actions {
-  animation: heroTextIn .64s cubic-bezier(.2,.72,.24,1) .42s forwards;
-}
-
-.hero-slide.is-active .hero-slider-note {
-  animation: heroTextIn .60s cubic-bezier(.2,.72,.24,1) .53s forwards;
-}
-
-@keyframes heroTextIn {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Animación inspirada en la referencia: etiqueta desde la izquierda,
+   título completo desde la derecha con máscara y resto mediante fade. */
 .hero-slide .eyebrow {
   margin-bottom: 18px;
   color: #8ed9ff;
   text-shadow: 0 2px 14px rgba(0,0,0,.22);
+  opacity: 0;
+  transform: translateX(-72px);
+}
+
+.hero-slide.is-active .eyebrow {
+  animation: heroEyebrowIn .46s cubic-bezier(.18,.78,.24,1) .04s forwards;
 }
 
 .hero-slide h1,
@@ -130,11 +95,34 @@
   color: #fff;
   text-wrap: balance;
   text-shadow: 0 4px 30px rgba(0,0,0,.28);
+  opacity: 0;
+  transform: translateX(150px);
+  clip-path: inset(0 0 0 100%);
+  will-change: transform, opacity, clip-path;
 }
 
 .hero-slide h1 span,
-.hero-slide h2 span {
+.hero-slide h2 span,
+.hero-slide h1 .hero-word-accent,
+.hero-slide h2 .hero-word-accent {
   color: #70ceff;
+}
+
+/* Neutraliza el experimento anterior de palabra por palabra sin cambiar el texto. */
+.hero-slide h1 .hero-word,
+.hero-slide h2 .hero-word {
+  display: inline;
+  opacity: 1;
+  transform: none;
+  filter: none;
+  clip-path: none;
+  animation: none;
+  will-change: auto;
+}
+
+.hero-slide.is-active h1,
+.hero-slide.is-active h2 {
+  animation: heroTitleSweep .62s cubic-bezier(.16,.82,.22,1) .12s forwards;
 }
 
 .hero-slide-lead {
@@ -144,6 +132,12 @@
   line-height: 1.75;
   color: rgba(255,255,255,.82);
   text-shadow: 0 2px 16px rgba(0,0,0,.24);
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.hero-slide.is-active .hero-slide-lead {
+  animation: heroSoftFade .48s ease-out .50s forwards;
 }
 
 .hero-slider .hero-actions {
@@ -151,6 +145,12 @@
   flex-wrap: wrap;
   gap: 14px;
   margin-top: 34px;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.hero-slide.is-active .hero-actions {
+  animation: heroSoftFade .46s ease-out .62s forwards;
 }
 
 .hero-slider .button-primary {
@@ -173,6 +173,12 @@
   margin-top: 26px;
   color: rgba(255,255,255,.7);
   font-size: .9rem;
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.hero-slide.is-active .hero-slider-note {
+  animation: heroSoftFade .44s ease-out .72s forwards;
 }
 
 .hero-slider-note::before {
@@ -183,6 +189,47 @@
   border-radius: 50%;
   background: #5ee6a8;
   box-shadow: 0 0 0 6px rgba(94,230,168,.1);
+}
+
+@keyframes heroEyebrowIn {
+  from {
+    opacity: 0;
+    transform: translateX(-72px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes heroTitleSweep {
+  0% {
+    opacity: 0;
+    transform: translateX(150px);
+    clip-path: inset(0 0 0 100%);
+  }
+  22% {
+    opacity: 1;
+  }
+  55% {
+    clip-path: inset(0 0 0 24%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes heroSoftFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hero-slider-control {
@@ -215,7 +262,6 @@
   transform: translateY(-50%) scale(1.05);
 }
 
-/* Flechas pegadas a los laterales para liberar el área del texto. */
 .hero-slider-prev { left: 18px; }
 .hero-slider-next { right: 18px; }
 
@@ -275,6 +321,7 @@
   .hero-slide h1,
   .hero-slide h2 {
     font-size: clamp(2.8rem, 8vw, 4.4rem);
+    transform: translateX(110px);
   }
 
   .hero-slide-overlay {
@@ -315,6 +362,7 @@
   .hero-slide h2 {
     margin-bottom: 20px;
     font-size: clamp(2.55rem, 12vw, 3.6rem);
+    transform: translateX(78px);
   }
 
   .hero-slide-lead {
@@ -375,89 +423,6 @@
   .hero-slide.is-active .hero-slider-note {
     opacity: 1;
     transform: none;
-    animation: none;
-  }
-}
-
-/* Títulos: revelado palabra por palabra, más cercano al efecto visual de la referencia. */
-.hero-slide h1,
-.hero-slide h2,
-.hero-slide.is-active h1,
-.hero-slide.is-active h2 {
-  opacity: 1;
-  transform: none;
-  animation: none;
-}
-
-.hero-slide h1 .hero-word,
-.hero-slide h2 .hero-word {
-  display: inline-block;
-  color: #ffffff;
-  opacity: 0;
-  transform: translateY(.92em) rotateX(-42deg) scale(.96);
-  transform-origin: 50% 100%;
-  filter: blur(7px);
-  clip-path: inset(92% 0 0 0);
-  will-change: transform, opacity, filter, clip-path;
-}
-
-.hero-slide h1 .hero-word-accent,
-.hero-slide h2 .hero-word-accent {
-  color: #70ceff;
-}
-
-.hero-word:nth-of-type(1) { --word-delay: .12s; }
-.hero-word:nth-of-type(2) { --word-delay: .22s; }
-.hero-word:nth-of-type(3) { --word-delay: .32s; }
-.hero-word:nth-of-type(4) { --word-delay: .42s; }
-.hero-word:nth-of-type(5) { --word-delay: .52s; }
-.hero-word:nth-of-type(6) { --word-delay: .62s; }
-.hero-word:nth-of-type(7) { --word-delay: .72s; }
-.hero-word:nth-of-type(8) { --word-delay: .82s; }
-
-.hero-slide.is-active .hero-word {
-  animation: heroWordReveal .82s cubic-bezier(.16,.84,.24,1) var(--word-delay, .12s) forwards;
-}
-
-@keyframes heroWordReveal {
-  0% {
-    opacity: 0;
-    transform: translateY(.92em) rotateX(-42deg) scale(.96);
-    filter: blur(7px);
-    clip-path: inset(92% 0 0 0);
-  }
-  58% {
-    opacity: 1;
-    filter: blur(1px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) rotateX(0) scale(1);
-    filter: blur(0);
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-/* El resto entra después de que el título ya empezó a construirse palabra a palabra. */
-.hero-slide.is-active .hero-slide-lead {
-  animation-delay: .88s;
-}
-
-.hero-slide.is-active .hero-actions {
-  animation-delay: 1.03s;
-}
-
-.hero-slide.is-active .hero-slider-note {
-  animation-delay: 1.16s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-slide h1 .hero-word,
-  .hero-slide h2 .hero-word,
-  .hero-slide.is-active .hero-word {
-    opacity: 1;
-    transform: none;
-    filter: none;
     clip-path: none;
     animation: none;
   }
