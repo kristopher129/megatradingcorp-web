@@ -103,7 +103,7 @@ if (contactActions) {
 }
 
 // Identidad visual oficial de Mega Trading Corporation.
-const officialLogo = 'assets/logo-mega-trading-email.png?v=4';
+const officialLogo = 'assets/logo-mega-trading-web.webp?v=1';
 
 if (!document.querySelector('link[href="css/brand-logo.css"]')) {
   const brandStyles = document.createElement('link');
@@ -132,7 +132,7 @@ if (!favicon) {
   favicon.rel = 'icon';
   document.head.appendChild(favicon);
 }
-favicon.type = 'image/png';
+favicon.type = 'image/webp';
 favicon.href = officialLogo;
 
 let appleTouchIcon = document.querySelector('link[rel="apple-touch-icon"]');
