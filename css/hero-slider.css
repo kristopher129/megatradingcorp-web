@@ -378,3 +378,87 @@
     animation: none;
   }
 }
+
+/* Títulos: revelado palabra por palabra, más cercano al efecto visual de la referencia. */
+.hero-slide h1,
+.hero-slide h2,
+.hero-slide.is-active h1,
+.hero-slide.is-active h2 {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+.hero-slide h1 .hero-word,
+.hero-slide h2 .hero-word {
+  display: inline-block;
+  color: #ffffff;
+  opacity: 0;
+  transform: translateY(.92em) rotateX(-42deg) scale(.96);
+  transform-origin: 50% 100%;
+  filter: blur(7px);
+  clip-path: inset(92% 0 0 0);
+  will-change: transform, opacity, filter, clip-path;
+}
+
+.hero-slide h1 .hero-word-accent,
+.hero-slide h2 .hero-word-accent {
+  color: #70ceff;
+}
+
+.hero-word:nth-of-type(1) { --word-delay: .12s; }
+.hero-word:nth-of-type(2) { --word-delay: .22s; }
+.hero-word:nth-of-type(3) { --word-delay: .32s; }
+.hero-word:nth-of-type(4) { --word-delay: .42s; }
+.hero-word:nth-of-type(5) { --word-delay: .52s; }
+.hero-word:nth-of-type(6) { --word-delay: .62s; }
+.hero-word:nth-of-type(7) { --word-delay: .72s; }
+.hero-word:nth-of-type(8) { --word-delay: .82s; }
+
+.hero-slide.is-active .hero-word {
+  animation: heroWordReveal .82s cubic-bezier(.16,.84,.24,1) var(--word-delay, .12s) forwards;
+}
+
+@keyframes heroWordReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(.92em) rotateX(-42deg) scale(.96);
+    filter: blur(7px);
+    clip-path: inset(92% 0 0 0);
+  }
+  58% {
+    opacity: 1;
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0) scale(1);
+    filter: blur(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* El resto entra después de que el título ya empezó a construirse palabra a palabra. */
+.hero-slide.is-active .hero-slide-lead {
+  animation-delay: .88s;
+}
+
+.hero-slide.is-active .hero-actions {
+  animation-delay: 1.03s;
+}
+
+.hero-slide.is-active .hero-slider-note {
+  animation-delay: 1.16s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide h1 .hero-word,
+  .hero-slide h2 .hero-word,
+  .hero-slide.is-active .hero-word {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: none;
+    animation: none;
+  }
+}
