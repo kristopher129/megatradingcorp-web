@@ -16,14 +16,11 @@
   inset: 0;
   display: grid;
   align-items: center;
-  opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity .7s ease, visibility .7s ease;
 }
 
 .hero-slide.is-active {
-  opacity: 1;
   visibility: visible;
   pointer-events: auto;
   z-index: 2;
@@ -68,22 +65,20 @@
 .hero-slide-content {
   width: min(720px, 68vw);
   padding: 92px 0 116px;
-  --title-start-x: 230px;
 }
 
-/* Movimiento combinado como en la referencia:
-   etiqueta desde arriba, título desde la derecha y resto desde abajo. */
+/* Los elementos ya son visibles: simplemente viajan desde fuera del hero. */
 .hero-slide .eyebrow {
   margin-bottom: 18px;
   color: #8ed9ff;
   text-shadow: 0 2px 14px rgba(0,0,0,.22);
-  opacity: 0;
-  transform: translateY(-64px);
-  will-change: transform, opacity;
+  opacity: 1;
+  transform: translateY(-340px);
+  will-change: transform;
 }
 
 .hero-slide.is-active .eyebrow {
-  animation: heroEyebrowDrop .54s cubic-bezier(.18,.78,.24,1) .03s forwards;
+  animation: heroFlyFromTop .72s cubic-bezier(.18,.78,.22,1) .02s both;
 }
 
 .hero-slide h1,
@@ -97,10 +92,9 @@
   color: #fff;
   text-wrap: balance;
   text-shadow: 0 4px 30px rgba(0,0,0,.28);
-  opacity: 0;
-  transform: translateX(var(--title-start-x));
-  clip-path: inset(0 0 0 62%);
-  will-change: transform, opacity, clip-path;
+  opacity: 1;
+  transform: translateX(100vw);
+  will-change: transform;
 }
 
 .hero-slide h1 span,
@@ -110,7 +104,7 @@
   color: #70ceff;
 }
 
-/* El experimento anterior dividía el título en palabras; se neutraliza visualmente. */
+/* Neutraliza por completo el experimento anterior por palabras. */
 .hero-slide h1 .hero-word,
 .hero-slide h2 .hero-word {
   display: inline;
@@ -124,7 +118,7 @@
 
 .hero-slide.is-active h1,
 .hero-slide.is-active h2 {
-  animation: heroTitleFromRight .72s cubic-bezier(.12,.8,.2,1) .08s forwards;
+  animation: heroFlyFromRight .78s cubic-bezier(.14,.8,.2,1) .05s both;
 }
 
 .hero-slide-lead {
@@ -134,13 +128,13 @@
   line-height: 1.75;
   color: rgba(255,255,255,.82);
   text-shadow: 0 2px 16px rgba(0,0,0,.24);
-  opacity: 0;
-  transform: translateY(68px);
-  will-change: transform, opacity;
+  opacity: 1;
+  transform: translateY(360px);
+  will-change: transform;
 }
 
 .hero-slide.is-active .hero-slide-lead {
-  animation: heroFromBelow .60s cubic-bezier(.18,.76,.25,1) .20s forwards;
+  animation: heroFlyFromBottom .70s cubic-bezier(.18,.76,.24,1) .12s both;
 }
 
 .hero-slider .hero-actions {
@@ -148,13 +142,13 @@
   flex-wrap: wrap;
   gap: 14px;
   margin-top: 34px;
-  opacity: 0;
-  transform: translateY(92px);
-  will-change: transform, opacity;
+  opacity: 1;
+  transform: translateY(420px);
+  will-change: transform;
 }
 
 .hero-slide.is-active .hero-actions {
-  animation: heroFromBelow .62s cubic-bezier(.18,.76,.25,1) .30s forwards;
+  animation: heroFlyFromBottom .72s cubic-bezier(.18,.76,.24,1) .18s both;
 }
 
 .hero-slider .button-primary {
@@ -177,13 +171,13 @@
   margin-top: 26px;
   color: rgba(255,255,255,.7);
   font-size: .9rem;
-  opacity: 0;
-  transform: translateY(58px);
-  will-change: transform, opacity;
+  opacity: 1;
+  transform: translateY(460px);
+  will-change: transform;
 }
 
 .hero-slide.is-active .hero-slider-note {
-  animation: heroFromBelow .56s cubic-bezier(.18,.76,.25,1) .40s forwards;
+  animation: heroFlyFromBottom .68s cubic-bezier(.18,.76,.24,1) .24s both;
 }
 
 .hero-slider-note::before {
@@ -196,45 +190,19 @@
   box-shadow: 0 0 0 6px rgba(94,230,168,.1);
 }
 
-@keyframes heroEyebrowDrop {
-  0% {
-    opacity: 0;
-    transform: translateY(-64px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes heroFlyFromTop {
+  from { transform: translateY(-340px); }
+  to { transform: translateY(0); }
 }
 
-@keyframes heroTitleFromRight {
-  0% {
-    opacity: .15;
-    transform: translateX(var(--title-start-x));
-    clip-path: inset(0 0 0 62%);
-  }
-  24% {
-    opacity: 1;
-    clip-path: inset(0 0 0 42%);
-  }
-  62% {
-    clip-path: inset(0 0 0 8%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-    clip-path: inset(0 0 0 0);
-  }
+@keyframes heroFlyFromRight {
+  from { transform: translateX(100vw); }
+  to { transform: translateX(0); }
 }
 
-@keyframes heroFromBelow {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes heroFlyFromBottom {
+  from { transform: translateY(420px); }
+  to { transform: translateY(0); }
 }
 
 .hero-slider-control {
@@ -321,7 +289,6 @@
   .hero-slide-content {
     width: min(680px, calc(100vw - 110px));
     padding: 82px 0 104px;
-    --title-start-x: 150px;
   }
 
   .hero-slide h1,
@@ -331,6 +298,22 @@
 
   .hero-slide-overlay {
     background: linear-gradient(90deg, rgba(4,17,33,.94), rgba(4,22,42,.74) 65%, rgba(4,22,42,.38));
+  }
+
+  .hero-slide .eyebrow {
+    transform: translateY(-280px);
+  }
+
+  .hero-slide-lead {
+    transform: translateY(320px);
+  }
+
+  .hero-slider .hero-actions {
+    transform: translateY(360px);
+  }
+
+  .hero-slider-note {
+    transform: translateY(390px);
   }
 
   .hero-slider-control {
@@ -361,7 +344,6 @@
   .hero-slide-content {
     width: calc(100vw - 40px);
     padding: 72px 0 110px;
-    --title-start-x: 92px;
   }
 
   .hero-slide h1,
@@ -371,18 +353,22 @@
   }
 
   .hero-slide .eyebrow {
-    transform: translateY(-44px);
+    transform: translateY(-230px);
   }
 
   .hero-slide-lead {
     font-size: .98rem;
     line-height: 1.65;
-    transform: translateY(48px);
+    transform: translateY(300px);
   }
 
   .hero-slider .hero-actions {
     margin-top: 28px;
-    transform: translateY(64px);
+    transform: translateY(340px);
+  }
+
+  .hero-slider-note {
+    transform: translateY(370px);
   }
 
   .hero-slider .button {
@@ -409,7 +395,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-slide,
   .hero-slide-image,
   .hero-slider-dot,
   .hero-slider-control {
@@ -434,7 +419,6 @@
   .hero-slide.is-active .hero-slider-note {
     opacity: 1;
     transform: none;
-    clip-path: none;
     animation: none;
   }
 }
