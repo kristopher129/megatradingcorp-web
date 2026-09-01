@@ -1,6 +1,26 @@
 (() => {
   const quoteEmail = 'cotizar@megatradingcorp.com';
   const endpoint = `https://formsubmit.co/ajax/${quoteEmail}`;
+  const quoteSubject = 'Solicitud de cotización - Mega Trading Corporation';
+  const quoteMailBody = [
+    'Hola,',
+    '',
+    'Quisiera solicitar una cotización para la siguiente operación:',
+    '',
+    'Nombre y apellido:',
+    'Empresa:',
+    'Correo electrónico:',
+    'Teléfono:',
+    'Origen:',
+    'Destino:',
+    'Tipo de carga:',
+    'Peso / volumen:',
+    'Servicio requerido:',
+    'Información adicional:',
+    '',
+    'Gracias.'
+  ].join('\n');
+  const quoteMailto = `mailto:${quoteEmail}?subject=${encodeURIComponent(quoteSubject)}&body=${encodeURIComponent(quoteMailBody)}`;
 
   if (!document.querySelector('link[href="css/quote-form.css"]')) {
     const formStyles = document.createElement('link');
@@ -137,18 +157,56 @@
     lastFocusedElement?.focus?.();
   };
 
+  // Los navegadores no exponen una confirmación fiable de que un manejador
+  // mailto se abrió. Usamos señales de pérdida de foco/visibilidad y, si la
+  // página sigue activa, mostramos el formulario web como respaldo.
+  const tryMailtoWithFallback = (trigger) => {
+    let handoffDetected = false;
+    let finished = false;
+
+    const markHandoff = () => {
+      handoffDetected = true;
+    };
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'hidden') markHandoff();
+    };
+
+    const cleanup = () => {
+      window.removeEventListener('blur', markHandoff);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+
+    window.addEventListener('blur', markHandoff);
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    window.location.href = quoteMailto;
+
+    window.setTimeout(() => {
+      if (finished) return;
+      finished = true;
+      cleanup();
+
+      if (!handoffDetected && document.visibilityState === 'visible' && document.hasFocus()) {
+        openModal(trigger);
+      }
+    }, 1400);
+  };
+
   const bindQuoteButtons = () => {
-    document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
+    document.querySelectorAll('a').forEach((link) => {
       const href = link.getAttribute('href') || '';
-      if (!href.toLowerCase().includes(quoteEmail.toLowerCase())) return;
+      const pointsToQuoteEmail = href.toLowerCase().startsWith('mailto:') && href.toLowerCase().includes(quoteEmail.toLowerCase());
+      const pointsToQuoteForm = href === '#cotizacion';
+      if (!pointsToQuoteEmail && !pointsToQuoteForm) return;
       if (link.dataset.quoteBound === 'true') return;
 
       link.dataset.quoteBound = 'true';
-      link.setAttribute('aria-haspopup', 'dialog');
-      link.setAttribute('href', '#cotizacion');
+      link.setAttribute('href', quoteMailto);
+      link.setAttribute('data-quote-fallback', 'form');
       link.addEventListener('click', (event) => {
         event.preventDefault();
-        openModal(link);
+        tryMailtoWithFallback(link);
       });
     });
   };
