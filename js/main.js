@@ -77,9 +77,24 @@ if (aboutPanel) {
 // Contactos comerciales.
 const salesEmail = 'ventas1@megatradingcorp.com';
 const quoteEmail = 'cotizar@megatradingcorp.com';
+const quoteSubject = encodeURIComponent('Solicitud de cotización - Mega Trading Corporation');
+const quoteBody = encodeURIComponent(`Hola,
+
+Quisiera solicitar una cotización para la siguiente operación:
+
+Origen:
+Destino:
+Tipo de carga:
+Peso/volumen aproximado:
+Servicio requerido:
+
+Información adicional:
+
+Gracias.`);
+const quoteMailto = `mailto:${quoteEmail}?subject=${quoteSubject}&body=${quoteBody}`;
 
 document.querySelectorAll('.nav-cta, .hero-actions .button-primary').forEach((link) => {
-  link.href = `mailto:${quoteEmail}`;
+  link.href = quoteMailto;
 });
 
 const contactTitle = document.querySelector('.contact h2');
@@ -171,7 +186,7 @@ if (originalHero) {
             <h1>Logística integral <span>de principio a fin.</span></h1>
             <p class="hero-slide-lead">Coordinamos cada etapa de su operación de importación y exportación, desde el origen de la carga hasta su entrega en destino.</p>
             <div class="hero-actions">
-              <a class="button button-primary" href="mailto:${quoteEmail}">Solicitar cotización</a>
+              <a class="button button-primary" href="${quoteMailto}">Solicitar cotización</a>
               <a class="button button-ghost" href="#servicios">Conocer servicios</a>
             </div>
             <p class="hero-slider-note">Un solo punto de contacto para toda su operación logística.</p>
@@ -191,7 +206,7 @@ if (originalHero) {
             <p class="hero-slide-lead">Gestionamos soluciones de transporte de acuerdo con las características, tiempos y destino de cada operación.</p>
             <div class="hero-actions">
               <a class="button button-primary" href="#servicios">Ver soluciones de transporte</a>
-              <a class="button button-ghost" href="mailto:${quoteEmail}">Solicitar cotización</a>
+              <a class="button button-ghost" href="${quoteMailto}">Solicitar cotización</a>
             </div>
           </div>
         </div>
