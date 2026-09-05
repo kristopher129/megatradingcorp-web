@@ -1,0 +1,62 @@
+name: Fix signature backgrounds v2
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-signature-backgrounds-v2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix-signatures:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Pillow
+        run: python -m pip install --quiet pillow
+
+      - name: Replace only pure black canvas pixels with white
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          files = [
+              Path('assets/mega-trading-firma-ventas.png'),
+              Path('assets/mega-trading-firma-cotizaciones.png'),
+              Path('assets/mega-trading-firma-contabilidad.png'),
+              Path('assets/mega-trading-firma-operaciones.png'),
+          ]
+
+          for path in files:
+              image = Image.open(path).convert('RGB')
+              px = image.load()
+              changed = 0
+              for y in range(image.height):
+                  for x in range(image.width):
+                      if px[x, y] == (0, 0, 0):
+                          px[x, y] = (255, 255, 255)
+                          changed += 1
+              image.save(path, 'PNG', optimize=True)
+              print(f'{path}: {changed} background pixels changed')
+          PY
+
+      - name: Commit corrected signatures and clean temporary workflows
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/mega-trading-firma-ventas.png \
+                  assets/mega-trading-firma-cotizaciones.png \
+                  assets/mega-trading-firma-contabilidad.png \
+                  assets/mega-trading-firma-operaciones.png
+          git rm --ignore-unmatch .github/workflows/fix-signature-backgrounds.yml
+          git rm --ignore-unmatch .github/workflows/fix-signature-backgrounds-v2.yml
+          if git diff --cached --quiet; then
+            echo 'No changes to commit.'
+            exit 0
+          fi
+          git commit -m "assets: use white backgrounds for departmental signatures"
+          git push
