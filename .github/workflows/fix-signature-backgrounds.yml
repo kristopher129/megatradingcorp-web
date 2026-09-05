@@ -1,0 +1,54 @@
+name: Fix signature backgrounds
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-signature-backgrounds.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix-signatures:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Replace black signature backgrounds with white
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          files = [
+              Path('assets/mega-trading-firma-ventas.png'),
+              Path('assets/mega-trading-firma-cotizaciones.png'),
+              Path('assets/mega-trading-firma-contabilidad.png'),
+              Path('assets/mega-trading-firma-operaciones.png'),
+          ]
+
+          for path in files:
+              image = Image.open(path).convert('RGB')
+              pixels = image.load()
+              for y in range(image.height):
+                  for x in range(image.width):
+                      r, g, b = pixels[x, y]
+                      # Only replace the actual black canvas. All colored logo,
+                      # typography and icon pixels remain untouched.
+                      if r == 0 and g == 0 and b == 0:
+                          pixels[x, y] = (255, 255, 255)
+              image.save(path, 'PNG', optimize=True)
+          PY
+
+      - name: Commit corrected signatures and remove one-off workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/mega-trading-firma-ventas.png \
+                  assets/mega-trading-firma-cotizaciones.png \
+                  assets/mega-trading-firma-contabilidad.png \
+                  assets/mega-trading-firma-operaciones.png
+          git rm .github/workflows/fix-signature-backgrounds.yml
+          git commit -m "assets: use white backgrounds for departmental signatures"
+          git push
